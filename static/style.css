@@ -1,0 +1,563 @@
+/* Basisreset en algemene opmaak */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body, html {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #edf6f9; /* Zachte, lichtblauwe achtergrondkleur */
+    color: #4a4a4a; /* Donkere grijstint voor tekst */
+    position: relative;
+    overflow: hidden;
+    z-index: -1
+}
+
+/* Wereldkaart als achtergrond */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('worldmappng.png'); /* Vervang door de juiste afbeelding */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.3; /* Nog subtieler maken */
+    z-index: -2;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5); /* Witte overlay met 50% transparantie */
+    z-index: -1; /* Achter de content, maar boven de kaart */
+}
+
+/* Introductie sectie */
+.intro-section {
+    text-align: center;
+    padding: 20px;
+    background-color: #e8f5e9; /* Zachtgroene tint */
+    border-bottom: 2px solid #b0bec5; /* Grijze onderrand */
+    margin-bottom: 30px;
+    z-index: 1
+}
+
+.intro-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.intro-section, .controls, #map {
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Lichte schaduw voor diepte */
+}
+
+.intro-text h1 {
+    font-size: 2.2em;
+    color: #2e7d32; /* Diep groen voor titels */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.intro-text p {
+    font-size: 1.1em;
+    color: #4a4a4a;
+}
+
+/* Logo styling */
+.logo {
+    height: 80px;
+    width: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.controls {
+    background: rgba(232, 245, 233);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    max-width: 100%;
+    width: auto;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+    z-index: 1;
+}
+
+/* Specifieke groepen zoals Buffer en Calculate verticaal stapelen */
+#bufferControls, #reachableControls, #routeControls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Stijl voor labels om ze wat ruimte boven de invoervelden te geven */
+.controls label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+/* Standaard knoppen styling */
+
+/* Knoppen styling */
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    background-color: #388e3c;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #2e7d32;
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+input[type="text"], select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #b0bec5;
+    font-size: 1em;
+    width: 150px;
+    color: #2e7d32;
+    background-color: #ffffff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1
+}
+
+input[type="text"]:focus, select:focus {
+    border-color: #388e3c;
+    box-shadow: 0px 0px 8px rgba(56, 142, 60, 0.3);
+}
+
+input, select {
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Kaart sectie */
+#map {
+    width: 90vw;
+    height: 70vh;
+    margin-top: 10px;
+    border: 2px solid #b0bec5;
+    border-radius: 8px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    z-index: 0; /* Zorg dat de kaart zich achter andere elementen bevindt */
+    position: relative; /* Zorg dat de kaart niet onder andere elementen verdwijnt */
+}
+
+/* Modal voor informatie */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding-top: 100px;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 80%;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+/* Styling van het info-icoon */
+.info-icon {
+    font-size: 18px;
+    cursor: pointer;
+    color: #2e7d32;
+    transition: color 0.3s;
+    margin-left: 5px;
+}
+
+.info-icon:hover {
+    color: #388e3c;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    .intro-content {
+        flex-direction: column;
+    }
+
+    .controls {
+        width: 90%;
+    }
+
+    #map {
+        width: 95vw;
+        height: 60vh;
+    }
+}
+
+@keyframes subtleZoom {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+body::before {
+    animation: subtleZoom 30s infinite ease-in-out;
+}
+
+#reset-markers {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    background-color: #d32f2f; /* Een rode kleur om op reset te wijzen */
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#reset-markers:hover {
+    background-color: #b71c1c; /* Donkerder rood bij hover */
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+#time {
+    padding: 8px; /* Maak consistent met andere velden */
+    border-radius: 5px;
+    border: 1px solid #b0bec5;
+    font-size: 1em;
+    width: 150px; /* Zelfde breedte als andere invoervelden */
+    color: #2e7d32;
+    background-color: #ffffff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Standaard verborgen laadicoon */
+#loadingIndicator {
+    display: none; /* Verborgen totdat het nodig is */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.8); /* Donkere achtergrond */
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+}
+
+/* Professionele spinner */
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3); /* Licht transparante rand */
+    border-top: 4px solid #ffffff; /* Witte bovenrand */
+    border-radius: 50%; /* Cirkelvorm */
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 10px; /* Ruimte onder de spinner */
+    animation: spin 0.8s linear infinite; /* Rotatie-animatie */
+}
+
+/* Spinner-animatie */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Styling voor de tekst */
+#loadingIndicator p {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* ZOEKBALK OPMAAK */
+.leaflet-control-geocoder {
+    position: absolute !important; /* Forceer de positie */
+    top: 10px !important; /* Bovenaan de kaart */
+    right: 120px !important; /* Plaats het naast de layerswitcher */
+    z-index: 1000; /* Zorg ervoor dat het boven andere elementen ligt */
+    background: #e8f5e9;
+    border-radius: 3px; /* Kleinere afronding */
+    padding: 3px 4px; /* Minder padding voor compactere uitstraling */
+    display: flex;
+    align-items: center;
+    gap: 4px; /* Minder ruimte tussen input en knop */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Zachtere schaduw */
+}
+
+.leaflet-control-geocoder input {
+    width: 150px !important; /* Compactere breedte */
+    padding: 4px; /* Minder padding */
+    border: 1px solid #ccc;
+    border-radius: 2px; /* Kleinere afronding */
+    outline: none;
+    font-size: 12px; /* Kleinere tekstgrootte */
+}
+
+.leaflet-control-geocoder button {
+    padding: 4px 8px; /* Compactere knopgrootte */
+    background-color: #4caf50; /* Knopkleur */
+    color: white; /* Tekstkleur */
+    border: none;
+    border-radius: 2px; /* Kleinere afronding */
+    font-size: 12px; /* Kleinere tekstgrootte */
+    cursor: pointer;
+    display: flex; /* Zorgt ervoor dat het SVG-icoon correct uitlijnt */
+    align-items: center;
+    justify-content: center;
+}
+
+.leaflet-control-geocoder button svg {
+    fill: white; /* Zorg dat het vergrootglas wit is */
+    width: 16px; /* Pas indien nodig aan */
+    height: 16px; /* Pas indien nodig aan */
+    transition: fill 0.2s ease; /* Zachte overgang bij hover */
+}
+
+.leaflet-control-geocoder button:hover {
+    background-color: #45a049; /* Donkerdere groen bij hover */
+    color: white; /* Zorg dat tekst en SVG wit blijven */
+}
+
+.leaflet-control-layers {
+    top: 10px;
+    right: 10px; /* Zorg dat het niet over de zoekbalk heen valt */
+    z-index: 1100; /* Houd de layerswitcher boven de kaart */
+}
+
+/* Custom Popup Styling */
+.leaflet-container .leaflet-popup-content-wrapper {
+    background-color: #e8f5e9 !important; /* Consistente groene achtergrond */
+    color: #333 !important; /* Donkergrijze tekstkleur */
+    border-radius: 10px !important; /* Ronder maken voor een zachtere uitstraling */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important; /* Zachtere schaduw */
+    font-family: Arial, sans-serif !important;
+    padding: 12px 16px !important; /* Meer padding voor ruimte in de pop-up */
+    position: relative; /* Voor de sluitknop */
+}
+
+/* De sluitknop */
+.leaflet-container .leaflet-popup-close-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: #4caf50 !important; /* Groene kleur passend bij de site */
+    font-size: 14px !important;
+    font-weight: bold !important;
+    text-decoration: none !important;
+    background: none; /* Geen achtergrond */
+    border: none; /* Geen rand */
+    cursor: pointer;
+    transition: color 0.2s ease; /* Vloeiende overgang bij hover */
+}
+
+.leaflet-container .leaflet-popup-close-button:hover {
+    color: #388e3c !important; /* Donkerdere groene kleur bij hover */
+}
+
+/* Tekst in de pop-up */
+.leaflet-container .leaflet-popup-content {
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important; /* Ruimtelijker tekst */
+    text-align: center !important; /* Tekst gecentreerd */
+}
+
+/* De 'tip' van de pop-up (pijltje) */
+.leaflet-container .leaflet-popup-tip {
+    background-color: #e8f5e9 !important; /* Zelfde kleur als de pop-up */
+    width: 14px; /* Maak het pijltje wat smaller */
+    height: 14px; /* Maak het pijltje wat smaller */
+}
+
+.popup-container {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 13px; /* Compactere tekstgrootte */
+    line-height: 1.4; /* Minder verticale ruimte */
+    color: #333;
+    padding: 6px; /* Compactere padding */
+}
+
+.popup-remove-btn {
+    display: inline-block;
+    margin-top: 4px; /* Minder ruimte tussen tekst en knop */
+    background-color: #d9534f; /* Professioneel rood (Bootstrap-stijl) */
+    color: white;
+    border: none;
+    padding: 4px 8px; /* Compacte knop */
+    font-size: 12px; /* Kleinere tekst in de knop */
+    border-radius: 3px; /* Rondere hoeken */
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.popup-remove-btn:hover {
+    background-color: #c9302c; /* Donkerder rood bij hover */
+    transform: scale(1.03); /* Klein zoom-effect */
+}
+
+.popup-remove-btn:active {
+    background-color: #ac2925; /* Nog donkerder rood bij klikken */
+    transform: scale(0.97); /* Kleinere schaal bij klikken */
+}
+
+/* Styling van de pop-up zelf */
+.leaflet-popup-content-wrapper {
+    background-color: #f9fbe7; /* Lichte tint groen voor zachtere uitstraling */
+    color: #333;
+    border-radius: 6px; /* Compactere afronding */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); /* Subtiele schaduw */
+    padding: 5px; /* Minder padding voor compactere pop-up */
+}
+
+.leaflet-popup-content {
+    margin: 0;
+    font-size: 13px; /* Iets subtielere tekst */
+    line-height: 1.2; /* Compactere regelafstand */
+}
+
+.leaflet-popup-tip {
+    background-color: #f9fbe7; /* Zelfde achtergrondkleur als pop-up */
+}
+
+.details-container {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    z-index: 1200;
+}
+
+.toggle-details-btn {
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+    font-size: 14px;
+    background-color: #2e7d32;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.toggle-details-btn:hover {
+    background-color: #2e7d32;
+}
+
+.details-content {
+    padding: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+
+
+/* Details Container Titel */
+#detailsTitle {
+    font-size: 16px; /* Verklein de lettergrootte */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Details Container Inhoud */
+#detailsBody {
+    font-size: 14px; /* Maak de inhoud iets kleiner */
+    line-height: 1.4; /* Zorg voor betere leesbaarheid */
+}
+
+#staticLegend {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 2000; /* Zorg dat het boven andere elementen ligt */
+}
+
+#staticLegend ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#staticLegend li {
+    margin-bottom: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.legend-line {
+    display: inline-block;
+    width: 30px;
+    height: 3px;
+    margin-right: 10px;
+    border-radius: 1px;
+}

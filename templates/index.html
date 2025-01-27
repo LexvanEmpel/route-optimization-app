@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Optimization Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    
+</head>
+<body>
+    <div class="intro-section">
+        <div class="intro-content">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Openstreetmap_logo.svg/800px-Openstreetmap_logo.svg.png" alt="OpenStreetMap Logo" class="logo">
+            <div class="intro-text">
+                <h1>Routing and Driving Distance Cost Analysis</h1>
+                <p>
+                    Select a point, mode of travel, and time to calculate reachable areas.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <label for="functionSwitch">Choose Function:</label>
+        <span id="infoIcon" class="info-icon" style="cursor: pointer;">ℹ️</span>
+        <select id="functionSwitch">
+            <option value="choosefunction">Choose function</option>
+            <option value="reachableArea">Reachable Area</option>
+            <option value="shortestRoute">Shortest Route</option>
+            <option value="Buffer">Buffer</option>
+        </select>
+    
+        <!-- Bereikbare gebieden controls -->
+        <div id="reachableControls" style="display: none;">
+            <label for="mode">Mode:</label>
+            <select id="mode">
+                <option value="walk">Walking</option>
+                <option value="drive">Driving</option>
+                <option value="bike">Cycling</option>
+            </select>
+            <label for="time">Time (minutes):</label>
+            <input type="text" id="time" placeholder="Enter time">
+            <button id="calculateReachableAreaBtn">Calculate</button>
+        </div>
+    
+        <!-- Kortste route controls -->
+        <div id="routeControls" style="display: none;">
+            <label for="routeMode">Mode:</label>
+            <select id="routeMode">
+                <option value="walk">Walking</option>
+                <option value="drive">Driving</option>
+                <option value="bike">Cycling</option>
+            </select>
+            <button id="calculateRouteBtn">Calculate</button>
+        </div>
+    
+        <!-- Buffer controls -->
+        <div id="bufferControls" style="display: none;">
+            <label for="buffer1">Minutes:</label>
+            <input type="text" id="buffer1" placeholder="Enter minutes">
+            <label for="buffer2">Minutes:</label>
+            <input type="text" id="buffer2" placeholder="Enter minutes">
+            <label for="buffer3">Minutes:</label>
+            <input type="text" id="buffer3" placeholder="Enter minutes">
+            <label for="modeBuffer">Mode:</label>
+            <select id="modeBuffer">
+                <option value="walk">Walking</option>
+                <option value="drive">Driving</option>
+                <option value="bike">Cycling</option>
+            </select>
+            <button id="calculateBufferBtn">Calculate</button>
+        </div>
+        <button id="resetMarkersBtn">Reset</button>
+    </div>
+    <div id="map"></div>
+
+    <!-- Details Container -->
+    <div id="detailsContainer" class="details-container">
+        <button id="toggleDetailsBtn" class="toggle-details-btn">▼ Details</button>
+        <div id="detailsContent" class="details-content hidden">
+            <h4 id="detailsTitle">Details</h4>
+            <div id="detailsBody">
+                <p>Select a function to start an analysis.</p>
+            </div>
+            <div id="staticLegend">
+                <h4>Legend</h4>
+                <ul></ul> <!-- Wordt dynamisch gevuld via JavaScript -->
+        </div>
+    </div>
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>    
+    <!-- Modal -->
+    <div id="infoModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <!-- Sluitknop -->
+            <span id="closeModal" class="close" style="cursor: pointer;">&times;</span>
+            <!-- Tekst binnen de modal -->
+            <p id="modalText">Default text for modal...</p>
+        </div>
+        
+    </div>  
+    <div id="loadingIndicator">
+        <div class="spinner"></div>
+        <p>Calculating...</p>
+    </div>
+    
+    </div>
+    
+    </div>
+
+    <script src="{{ url_for('static', filename='map.js') }}"></script>
+</body>
+</html>
