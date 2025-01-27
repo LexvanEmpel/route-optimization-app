@@ -198,7 +198,7 @@ document.getElementById('calculateReachableAreaBtn').addEventListener('click', f
     if (loadingIndicator) loadingIndicator.style.display = 'block';
 
     // 6. Maak een fetch-aanroep naar de backend om de gegevens op te halen
-    fetch('/calculate_reach', {
+    fetch('https://route-optimization-app-3wih.onrender.com/reachable_area', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -273,7 +273,7 @@ document.getElementById('calculateRouteBtn').addEventListener('click', function 
     const loadingIndicator = document.getElementById('loadingIndicator');
     loadingIndicator.style.display = 'block';
 
-    fetch('/calculate_route', {
+    fetch('https://route-optimization-app-3wih.onrender.com/calculate_route', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
