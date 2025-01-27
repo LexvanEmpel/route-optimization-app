@@ -289,4 +289,5 @@ def calculate_time_buffer():
     return jsonify({"buffers": buffers})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Gebruik Render's poort of standaard 5000
+    app.run(host="0.0.0.0", port=port)
